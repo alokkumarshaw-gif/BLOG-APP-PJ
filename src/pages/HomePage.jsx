@@ -10,6 +10,18 @@ const HomePage = () => {
   const { blogs } = useBlogContext();
   const [activeCategory, setActiveCategory] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
+  const [email, setEmail] = useState('');
+  const [subscribed, setSubscribed] = useState(false);
+
+  const handleSubscribe = () => {
+    if (!email || !email.includes('@') || !email.includes('.')) {
+      alert('Please enter a valid email address.');
+      return;
+    }
+    setSubscribed(true);
+    setEmail('');
+    setTimeout(() => setSubscribed(false), 4000);
+  };
 
   const filteredBlogs = blogs.filter((blog) => {
     const matchesCategory = activeCategory === 'All' || blog.category === activeCategory;
@@ -135,7 +147,7 @@ const HomePage = () => {
       </section>
 
       {/* Newsletter Section */}
-      <section style={{ backgroundColor: '#F8F9FA', padding: '80px 24px' }}>
+      <section style={{ backgroundColor: '#ECECEB', padding: '80px 24px' }}>
         <div style={{ maxWidth: '560px', margin: '0 auto', textAlign: 'center' }}>
           <h2 style={{ fontSize: '28px', fontWeight: '700', color: '#111827', marginBottom: '12px' }}>
             Never Miss a Blog!
@@ -143,41 +155,67 @@ const HomePage = () => {
           <p style={{ color: '#9CA3AF', fontSize: '14px', marginBottom: '32px' }}>
             Subscribe to get the latest blog, new tech, and exclusive news.
           </p>
-          <div style={{
-            display: 'flex',
-            maxWidth: '440px',
-            margin: '0 auto',
-            backgroundColor: '#FFFFFF',
-            borderRadius: '8px',
-            overflow: 'hidden',
-            border: '1px solid #E5E7EB',
-          }}>
-            <input
-              type="email"
-              placeholder="Enter your email address"
-              style={{
-                flex: 1,
-                padding: '14px 20px',
-                fontSize: '13px',
-                border: 'none',
-                outline: 'none',
-                color: '#374151',
-                backgroundColor: 'transparent',
-              }}
-            />
-            <button style={{
-              backgroundColor: '#6C63FF',
-              color: 'white',
-              padding: '14px 28px',
-              fontSize: '13px',
-              fontWeight: '500',
-              border: 'none',
-              cursor: 'pointer',
-              transition: 'background-color 0.2s',
+
+          {subscribed ? (
+            <div style={{
+              backgroundColor: '#ECFDF5',
+              border: '1px solid #6EE7B7',
+              borderRadius: '8px',
+              padding: '16px 24px',
+              maxWidth: '440px',
+              margin: '0 auto',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '8px',
             }}>
-              Subscribe
-            </button>
-          </div>
+              <span style={{ fontSize: '20px' }}>✅</span>
+              <span style={{ color: '#065F46', fontSize: '14px', fontWeight: '500' }}>
+                You've been subscribed successfully!
+              </span>
+            </div>
+          ) : (
+            <div style={{
+              display: 'flex',
+              maxWidth: '440px',
+              margin: '0 auto',
+              backgroundColor: '#FFFFFF',
+              borderRadius: '8px',
+              overflow: 'hidden',
+              border: '1px solid #E5E7EB',
+            }}>
+              <input
+                type="email"
+                placeholder="Enter your email address"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && handleSubscribe()}
+                style={{
+                  flex: 1,
+                  padding: '14px 20px',
+                  fontSize: '13px',
+                  border: 'none',
+                  outline: 'none',
+                  color: '#374151',
+                  backgroundColor: 'transparent',
+                }}
+              />
+              <button
+                onClick={handleSubscribe}
+                style={{
+                  backgroundColor: '#6C63FF',
+                  color: 'white',
+                  padding: '14px 28px',
+                  fontSize: '13px',
+                  fontWeight: '500',
+                  border: 'none',
+                  cursor: 'pointer',
+                  transition: 'background-color 0.2s',
+                }}>
+                Subscribe
+              </button>
+            </div>
+          )}
         </div>
       </section>
 
